@@ -54,21 +54,15 @@ fn test_build_urls () {
     let file = assert_fs::NamedTempFile::new("sample.txt").unwrap();
     file.write_str("google.com\nhttps://google.com\nasfasdf.asdf\nyahoo.com\nhttps://*.blah.pitt.edu\nhttp://espn.com").unwrap();
 
-    let base_case =
-        Prom {
-            targets: vec![
-                Url::parse("https://google.com").unwrap(),
-                Url::parse("https://*.blah.pitt.edu").unwrap(),
-                Url::parse("http://espn.com").unwrap(),
-            ],
-            labels: HashMap::from([
-                ("location".to_owned(), "BigIP".to_owned())
-            ]),
-        };
+    let base_case = vec![
+        Url::parse("https://google.com").unwrap(),
+        Url::parse("https://*.blah.pitt.edu").unwrap(),
+        Url::parse("http://espn.com").unwrap(),
+    ];
 
     let result = build_urls(&file.path()).unwrap();
 
-    assert_eq!(base_case.targets[0].as_str(), result[0].as_str());
-    assert_eq!(base_case.targets[1].as_str(), result[1].as_str());
-    assert_eq!(base_case.targets[2].as_str(), result[2].as_str());
+    assert_eq!(base_case[0].as_str(), result[0].as_str());
+    assert_eq!(base_case[1].as_str(), result[1].as_str());
+    assert_eq!(base_case[2].as_str(), result[2].as_str());
 }
