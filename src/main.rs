@@ -10,6 +10,9 @@ struct Args {
     /// File with list of URLs to parse.
     #[arg(short, long)]
     input_file: PathBuf,
+    /// File with list of subnets to check against
+    #[arg(short, long)]
+    subnet_file: PathBuf,
 }
 
 fn main() -> Result<(), anyhow::Error> {
@@ -18,6 +21,7 @@ fn main() -> Result<(), anyhow::Error> {
     let args = Args::parse();
 
     debug!("`&args.input_file`: {:?}", &args.input_file);
+    debug!("`&args.subnet_file`: {:?}", &args.subnet_file);
 
     // Build up a default Prom struct, with empty targets
     // and our pre-defined list of labels.
@@ -40,7 +44,9 @@ fn main() -> Result<(), anyhow::Error> {
     let urls = url2bigip::build_urls(&args.input_file)?;
     // Trim our list of URLs to only those that resolve in DNS.
     let sites = url2bigip::lookup_url(&urls);
-    debug!("`&sites`: {:?}", &sites);
+
+    // List of subnets to check IPs against for BigIP ranges.
+    let subnets = url2bigip::build_subnets(&args.subnet_file)?;
 
     // Debug print our resulting JSON files.
     // One for sites with the BigIP label, one for sites without.
