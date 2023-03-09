@@ -19,13 +19,27 @@ fn main() -> Result<(), anyhow::Error> {
 
     debug!("`&args.input_file`: {:?}", &args.input_file);
 
-    let mut prom_out = url2bigip::Prom {
-        targets: url2bigip::build_urls(&args.input_file)?,
+    // Build up a default Prom struct, with empty targets
+    // and our pre-defined list of labels.
+    // This will contain the list of targets that are on the BigIP
+    let mut bigip_prom = url2bigip::Prom {
+        targets: Vec::new(),
         labels: HashMap::from([
             ("location".to_owned(), "BigIP".to_owned())
         ]),
     };
-    debug!("Prometheus JSON:\n{}", serde_json::to_string_pretty(&prom_out).unwrap());
+
+    // This will contain the list of targets that are still valid,
+    // but NOT on the BigIP.
+    let mut other_prom = url2bigip::Prom {
+        targets: Vec::new(),
+        labels: HashMap::new(),
+    };
+
+    let urls = url2bigip::build_urls(&args.input_file)?;
+
+    debug!("Prometheus BigIP JSON:\n{}", serde_json::to_string_pretty(&bigip_prom).unwrap());
+    debug!("Prometheus Other JSON:\n{}", serde_json::to_string_pretty(&other_prom).unwrap());
     
     Ok(())
 }
