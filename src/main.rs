@@ -52,12 +52,13 @@ pub fn build_urls(path: &Path) -> Result<Vec<Url>, anyhow::Error> {
 #[test]
 fn test_build_urls () {
     let file = assert_fs::NamedTempFile::new("sample.txt").unwrap();
-    file.write_str("google.com\nhttps://google.com\nasfasdf.asdf\nyahoo.com\nhttp://espn.com").unwrap();
+    file.write_str("google.com\nhttps://google.com\nasfasdf.asdf\nyahoo.com\nhttps://*.blah.pitt.edu\nhttp://espn.com").unwrap();
 
     let base_case =
         Prom {
             targets: vec![
                 Url::parse("https://google.com").unwrap(),
+                Url::parse("https://*.blah.pitt.edu").unwrap(),
                 Url::parse("http://espn.com").unwrap(),
             ],
             labels: HashMap::from([
@@ -69,4 +70,5 @@ fn test_build_urls () {
 
     assert_eq!(base_case.targets[0].as_str(), result[0].as_str());
     assert_eq!(base_case.targets[1].as_str(), result[1].as_str());
+    assert_eq!(base_case.targets[2].as_str(), result[2].as_str());
 }
