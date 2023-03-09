@@ -1,5 +1,6 @@
 use clap::Parser;
 use log::{info, debug};
+use std::collections::HashMap;
 use std::path::PathBuf;
 
 /// A program for parsing a list of URLs and doing DNS queries. 
@@ -17,8 +18,14 @@ fn main() -> Result<(), anyhow::Error> {
     let args = Args::parse();
 
     debug!("`&args.input_file`: {:?}", &args.input_file);
-    
-    let mut urls = url2bigip::build_urls(&args.input_file)?;
 
+    let mut prom_out = url2bigip::Prom {
+        targets: url2bigip::build_urls(&args.input_file)?,
+        labels: HashMap::from([
+            ("location".to_owned(), "BigIP".to_owned())
+        ]),
+    };
+    debug!("Prometheus JSON:\n{}", serde_json::to_string_pretty(&prom_out).unwrap());
+    
     Ok(())
 }
