@@ -48,6 +48,8 @@ fn main() -> Result<(), anyhow::Error> {
     // List of subnets to check IPs against for BigIP ranges.
     let subnets = url2bigip::build_subnets(&args.subnet_file)?;
 
+    (bigip_prom.targets, other_prom.targets) = url2bigip::split_targets(&sites, &subnets);
+
     // Debug print our resulting JSON files.
     // One for sites with the BigIP label, one for sites without.
     debug!("Prometheus BigIP JSON:\n{}", serde_json::to_string_pretty(&bigip_prom).unwrap());

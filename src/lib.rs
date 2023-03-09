@@ -147,3 +147,13 @@ fn test_build_subnets() {
     assert_eq!(Ipv4Net::new(Ipv4Addr::new(192, 168, 0, 0), 24).unwrap(), result[0]);
     assert_eq!(Ipv4Net::new(Ipv4Addr::new(172, 16, 0, 0), 24).unwrap(), result[1]);
 }
+
+pub fn split_targets(sites: &[Site], subnets: &[Ipv4Net]) -> (Vec<Url>, Vec<Url>) {
+    // TODO
+    (Vec::new(), Vec::new())
+}
+
+#[test]
+fn test_split_targets() {
+    // TODO
+}
