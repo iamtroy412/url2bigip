@@ -150,7 +150,30 @@ fn test_build_subnets() {
 
 pub fn split_targets(sites: &[Site], subnets: &[Ipv4Net]) -> (Vec<Url>, Vec<Url>) {
     // TODO
-    (Vec::new(), Vec::new())
+    let mut bigip_targets = Vec::new();
+    let mut other_targets = Vec::new();
+
+    for site in sites.iter() {
+        let bigip_match = || {
+            for ip in site.ips.iter() {
+                for subnet in subnets.iter() {
+                    if let IpAddr::V4(v4) = ip {
+                        if subnet.contains(v4) {
+                            return true
+                        }
+                    }
+                }
+            }
+            false
+        };
+        if bigip_match() {
+            bigip_targets.push(site.url.clone());
+        } else {
+            other_targets.push(site.url.clone());
+        }
+    }
+
+    (bigip_targets, other_targets)
 }
 
 #[test]
