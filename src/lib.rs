@@ -48,8 +48,6 @@ pub fn build_urls(path: &Path) -> Result<Vec<Url>, anyhow::Error> {
 
 }
 
-
-
 #[test]
 fn test_build_urls () {
     let file = assert_fs::NamedTempFile::new("sample.txt").unwrap();
@@ -66,4 +64,14 @@ fn test_build_urls () {
     assert_eq!(base_case[0].as_str(), result[0].as_str());
     assert_eq!(base_case[1].as_str(), result[1].as_str());
     assert_eq!(base_case[2].as_str(), result[2].as_str());
+}
+
+pub fn lookup_url(urls: &[Url]) -> Vec<Url> {
+    // TODO:
+    Vec::new()
+}
+
+#[test]
+fn test_lookup_url () {
+    // TODO
 }
