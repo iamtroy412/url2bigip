@@ -39,8 +39,11 @@ fn main() -> Result<(), anyhow::Error> {
     // Parse our list of URLs.
     let urls = url2bigip::build_urls(&args.input_file)?;
     // Trim our list of URLs to only those that resolve in DNS.
-    let urls = url2bigip::lookup_url(&urls);
+    let sites = url2bigip::lookup_url(&urls);
+    debug!("`&sites`: {:?}", &sites);
 
+    // Debug print our resulting JSON files.
+    // One for sites with the BigIP label, one for sites without.
     debug!("Prometheus BigIP JSON:\n{}", serde_json::to_string_pretty(&bigip_prom).unwrap());
     debug!("Prometheus Other JSON:\n{}", serde_json::to_string_pretty(&other_prom).unwrap());
     
