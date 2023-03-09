@@ -1,1 +1,4 @@
 /target
+
+# Ignore testing txt files
+test.txt
