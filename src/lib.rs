@@ -95,6 +95,8 @@ pub fn lookup_url(urls: &[Url]) -> Vec<Site> {
         }
     }
 
+    info!("Found {} sites", sites.len());
+    debug!("`sites`: {:?}", sites);
     sites
 }
 
