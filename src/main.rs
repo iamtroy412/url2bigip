@@ -1,6 +1,8 @@
+use anyhow::{Context, Result};
 use clap::Parser;
 use log::{info, debug};
 use std::collections::HashMap;
+use std::fs::File;
 use std::path::PathBuf;
 
 /// A program for parsing a list of URLs and doing DNS queries. 
@@ -53,7 +55,22 @@ fn main() -> Result<(), anyhow::Error> {
     // Debug print our resulting JSON files.
     // One for sites with the BigIP label, one for sites without.
     debug!("Prometheus BigIP JSON:\n{}", serde_json::to_string_pretty(&bigip_prom).unwrap());
+    info!("Opening `bigip_prom.json` for writing");
+    let mut bigip_file = File::create("bigip_prom.json").with_context(||
+        format!("Failed to create `bigip_prom.json`"))?;
+    info!("Writing Site structs to `bigip_prom.json`");
+    serde_json::to_writer_pretty(&mut bigip_file, &bigip_prom).with_context(||
+        format!("Failed to write to `bigip_prom.json`"))?;
+
+
     debug!("Prometheus Other JSON:\n{}", serde_json::to_string_pretty(&other_prom).unwrap());
-    
+    info!("Opening `other_prom.json` for writing");
+    let mut other_file = File::create("other_prom.json").with_context(||
+        format!("Failed to create `other_prom.json`"))?;
+    info!("Writing Site structs to `other_prom.json`");
+    serde_json::to_writer_pretty(&mut other_file, &other_prom).with_context(||
+        format!("Failed to write to `bigip_prom.json`"))?;
+
     Ok(())
+
 }
