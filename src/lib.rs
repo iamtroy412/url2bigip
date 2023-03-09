@@ -17,7 +17,7 @@ pub struct Prom {
 pub fn build_urls(path: &Path) -> Result<Vec<Url>, anyhow::Error> {
     // TODO
     info!("Opening `{}` for reading...", path.display());
-    let file = File::open(&path).with_context(|| format!("Failed to open `{}`!", path.display()))?;
+    let file = File::open(path).with_context(|| format!("Failed to open `{}`!", path.display()))?;
 
     let reader = BufReader::new(file);
 
