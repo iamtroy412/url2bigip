@@ -6,12 +6,19 @@ use serde::Serialize;
 use std::collections::HashMap;
 use std::fs::File;
 use std::path::Path;
+use std::net::IpAddr;
 use url::{Url, ParseError};
 
 #[derive(Debug, Serialize)]
 pub struct Prom {
     pub targets: Vec<Url>,
     pub labels: HashMap<String, String>,
+}
+
+#[derive(Debug)]
+pub struct Site {
+    pub url: Url,
+    pub ips: Vec<IpAddr>,
 }
 
 pub fn build_urls(path: &Path) -> Result<Vec<Url>, anyhow::Error> {
@@ -66,7 +73,7 @@ fn test_build_urls () {
     assert_eq!(base_case[2].as_str(), result[2].as_str());
 }
 
-pub fn lookup_url(urls: &[Url]) -> Vec<Url> {
+pub fn lookup_url(urls: &[Url]) -> Vec<Site> {
     // TODO:
     Vec::new()
 }
