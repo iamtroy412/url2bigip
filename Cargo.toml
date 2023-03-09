@@ -1,0 +1,13 @@
+[package]
+name = "url2bigip"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.69"
+assert_fs = "1.0.10"
+log = "0.4.17"
+serde = { version = "1.0.154", features = ["derive"] }
+url = { version = "2.3.1", features = ["serde"] }
