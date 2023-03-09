@@ -41,6 +41,8 @@ pub fn build_urls(path: &Path) -> Result<Vec<Url>, anyhow::Error> {
         }
     }
 
+    info!("Read {} URLs from `{}`", urls.len(), path.display());
+    debug!("`&urls`: {:?}", urls);
     Ok(urls)
 
 }
