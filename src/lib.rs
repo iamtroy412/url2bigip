@@ -1,5 +1,6 @@
 use anyhow::{Context, Result};
 use assert_fs::prelude::*;
+use dns_lookup::lookup_host;
 use ipnet::Ipv4Net;
 use log::{debug, info, warn};
 use serde::Serialize;
@@ -75,13 +76,40 @@ fn test_build_urls () {
 }
 
 pub fn lookup_url(urls: &[Url]) -> Vec<Site> {
-    // TODO:
-    Vec::new()
+    let mut sites = Vec::new();
+
+    for url in urls.iter() {
+        if let Some(domain) = url.domain() {
+            match lookup_host(domain) {
+                Ok(addrs) => {
+                    debug!("`&addrs`: {:?}", addrs);
+                    // The clone here doesn't seem the best? Will return to this...
+                    sites.push(Site { url: url.clone(), ips: addrs });
+                },
+                Err(e) => {
+                    // TODO: Either write domains that didn't resolve to file,
+                    // or something else to keep track of them after the program runs.
+                    warn!("Failed to lookup `{}`! Error: {}", domain, e);
+                }
+            }
+        }
+    }
+
+    sites
 }
 
 #[test]
 fn test_lookup_url () {
     // TODO
+    let urls = vec![
+        Url::parse("https://google.com").unwrap(),
+        Url::parse("https://*.blah.pitt.edu").unwrap(),
+        Url::parse("http://espn.com").unwrap(),
+    ];
+
+    let results = lookup_url(&urls);
+    assert!(results.len() > 0);
+    assert!(results[0].ips.len() > 0);
 }
 
 pub fn build_subnets(input_path: &Path) -> Result<Vec<Ipv4Net>, anyhow::Error> {
