@@ -11,10 +11,14 @@ struct Args {
     input_file: PathBuf,
 }
 
-fn main() {
+fn main() -> Result<(), anyhow::Error> {
     env_logger::init();
     info!("Parsing command-line arguments");
     let args = Args::parse();
 
     debug!("`&args.input_file`: {:?}", &args.input_file);
+    
+    let mut urls = url2bigip::build_urls(&args.input_file)?;
+
+    Ok(())
 }

@@ -31,6 +31,7 @@ pub fn build_urls(path: &Path) -> Result<Vec<Url>, anyhow::Error> {
         debug!("`&line`: {:?}", line);
         match Url::parse(&line) {
             Ok(url) => {
+                debug!("`&url` as str: {:?}", url.as_str());
                 urls.push(url);
             }
             Err(e) => {
