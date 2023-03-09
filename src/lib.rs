@@ -134,6 +134,7 @@ pub fn build_subnets(input_path: &Path) -> Result<Vec<Ipv4Net>, anyhow::Error> {
             Err(e) => { warn!("{}", e); }
         }
     }
+    info!("Read {} subnets from `{}`", subnets.len(), &input_path.display());
     debug!("`subnets`: {:?}", &subnets);
     Ok(subnets)
 }
@@ -173,6 +174,8 @@ pub fn split_targets(sites: &[Site], subnets: &[Ipv4Net]) -> (Vec<Url>, Vec<Url>
         }
     }
 
+    info!("Found {} bigip targets", bigip_targets.len());
+    info!("Found {} other targets", other_targets.len());
     (bigip_targets, other_targets)
 }
 
